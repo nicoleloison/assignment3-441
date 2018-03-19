@@ -154,7 +154,13 @@ void setTrolls( int t ) {
         cout << "Set trolls at: "<<temp_trolls << endl;
     }
 }
-
+int numerical_data(char* ch, int start){
+    char l[4]= {'\0'};
+    for (int a =0; a<3;a++){
+        l[a]=ch [start+a];
+    }
+    return atoi(l);
+}
 /*main*/
 int main () {
 
@@ -168,23 +174,38 @@ int main () {
             char * cstr = new char [line.length()+1];
             strcpy (cstr, line.c_str());
             
-            
-            int n = sizeof(cstr);
+            int len = line.length();
+            cout<< "line len : "<< len<< endl;
             char * p = strtok (cstr," ");
             while (p!=0)
             {
                 int counter =0;
-                while (counter<6){
+                while (counter<sizeof(cstr)){
+                    // string str(cstr);
+                    //string a = str.substr(4,6);
                     temp_city1=cstr[0];
                     temp_city2=cstr[2];
+                    temp_distance = numerical_data(cstr,4);
+                    temp_time = numerical_data(cstr, 8);
+                    temp_gold = numerical_data(cstr, 12);
+                    //temp_trolls = numerical_data(cstr, 14);
+                    /*char h[4]= {'\0'};
+                    for (int f =0; f<3;f++){
+                        h[f]=cstr [14+f];
+                    }
+                    temp_trolls=atoi(h);*/
+                    temp_trolls = numerical_data(cstr,len-3);
+                    //cout << str << '\n';
+                    //temp_distance =atoi(p+3);
                     counter ++;
                 }
-               // cout << p << '\n';
+               //cout << p << '\n';
                 p = strtok(NULL," ");
+               
                 
             }
             
-            cout<< "last city1:"<< temp_city1<< " last city 2 "<< temp_city2<< endl;
+            cout<< "city1: "<< temp_city1<< " city2: "<< temp_city2 << " distance: "<< temp_distance << " time: "<< temp_time << " gold: "<< temp_gold << " trolls: "<< temp_trolls<< endl;
            
           
             delete[] cstr;
