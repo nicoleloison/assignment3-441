@@ -13,9 +13,6 @@
 
 using namespace std;
 
-string temp_city1, temp_city2;
-int temp_distance, temp_time, temp_gold, temp_trolls;
-
 void setDistance( int len );
 void setTime (int ti);
 void setCity( char * c, string str );
@@ -34,10 +31,6 @@ struct Segment {
 Segment::Segment(void){
     /*empty constructor*/
 }
-/**
- Segment::~Segment(void) {
- }
- **/
 
 /*Linked List of Segments */
 class List
@@ -60,18 +53,16 @@ void List::insert_first()
 {
     number_of_seg++;
     Segment *temp=new Segment;
-    temp->city1=temp_city1;
-    temp->city2=temp_city2;
-    temp->distance=temp_distance;
-    temp->time=temp_time;
-    temp->gold=temp_gold;
-    temp->trolls=temp_trolls;
+    
+    temp->city1='\0';
+    temp->city2='\0';
+    temp->distance=0;
+    temp->time=0;
+    temp->gold=0;
+    temp->trolls=0;
     temp->id=number_of_seg;
     temp->next=head;
     head=temp;
-    
-    
-    cout << "Segment Inserted. " << endl;
 }
 
 void List::delete_last()
@@ -102,7 +93,7 @@ void List::display()
         temp=temp->next;
     }
 }
-/*distance*/
+/*distance
 void setDistance( int len ) {
     if (len< 0 || len > 1000){
         cout << "Invalid Distance. 0<=Distance<=1000 " << endl;
@@ -112,7 +103,7 @@ void setDistance( int len ) {
         cout << "Set Distance at: "<<temp_distance << endl;
     }
 }
-/*time*/
+
 void setTime( int ti ) {
     if (ti< 0 || ti > 1000){
         cout << "Invalid Time. 0<=Time<=1000 " << endl;
@@ -122,13 +113,13 @@ void setTime( int ti ) {
         cout << "Set time at: "<<temp_time << endl;
     }
 }
-/*cities*/
+
 void setCity( char * c, string str) {
     str.copy( c, sizeof(str), 0 );
     cout << "Segment start at "<<str<< endl;
 }
 
-/*gold*/
+
 void setGold( int g ) {
     if (g< 0 || g > 100){
         cout << "Invalid Gold. 0<=Gold<=100 " << endl;
@@ -139,7 +130,7 @@ void setGold( int g ) {
     }
 }
 
-/*trolls*/
+
 void setTrolls( int t ) {
     if (t< 0 || t > 10){
         cout << "Invalid Trolls number. 0<=trols<=10 " << endl;
@@ -149,6 +140,7 @@ void setTrolls( int t ) {
         cout << "Set trolls at: "<<temp_trolls << endl;
     }
 }
+ */
 int numerical_data(char* ch, int start){
     char l[4]= {'\0'};
     for (int a =0; a<3;a++){
@@ -172,11 +164,9 @@ int main () {
             strcpy (cstr, line.c_str());
             
             int len = line.length();
-           // cout<< "line len : "<< len<< " last char: "<<cstr[len-1]<<endl;
             char * p = strtok (cstr," ");
             SegmentList.insert_first();
            
-             //SegmentList.insert_first();
             while (p!=0)
             {
                 int counter =0;
@@ -188,10 +178,8 @@ int main () {
                     SegmentList.head->gold = numerical_data(cstr, 12);
                     SegmentList.head->trolls=atoi(&cstr[len-1]);
                     counter++;
-                   
                   
                 }
-               //cout << p << '\n';
                 p = strtok(NULL," ");
                
                
