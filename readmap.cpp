@@ -25,7 +25,7 @@ void setTrolls (int t);
 /***Segment Object**/
 struct Segment {
     string city1, city2;
-    int distance, time, gold, trolls;
+    int distance, time, gold, trolls, id;
     
     Segment();
     Segment * next;
@@ -42,15 +42,17 @@ Segment::Segment(void){
 /*Linked List of Segments */
 class List
 {
-private:
-    Segment * head, * tail;
 public:
-    void segment_List()
+    int number_of_seg;
+    Segment * head, * tail;
+    List()
     {
         head=NULL;
         tail=NULL;
+        number_of_seg=0;
     }
     void create_Node();
+    void display();
     void insert_first();
     void delete_last();
 };
@@ -66,6 +68,9 @@ void List::insert_first()
     temp->trolls=temp_trolls;
     temp->next=head;
     head=temp;
+    
+    
+    cout << "Segment Inserted. " << endl;
 }
 
 void List::delete_last()
@@ -85,6 +90,7 @@ void List::delete_last()
 
 /*create_node*/
 void List::create_Node() {
+    number_of_seg++;
     Segment *temp=new Segment;
     temp->city1=temp_city1;
     temp->city2=temp_city2;
@@ -92,6 +98,7 @@ void List::create_Node() {
     temp->time=temp_time;
     temp->gold=temp_gold;
     temp->trolls=temp_trolls;
+    temp->id=number_of_seg;
     temp->next=NULL;
     if(head==NULL)
     {
@@ -106,6 +113,20 @@ void List::create_Node() {
     }
     
     cout << "Node Segment created. " << endl;
+}
+
+/*display node*/
+
+void List::display()
+{
+    Segment *temp=new Segment;
+    temp=head;
+    while(temp!=NULL)
+    {
+        cout<<"seg id: "<<temp->id<<" out of: "<<number_of_seg<<endl;
+        cout<< "city1: "<< temp->city1<< " city2: "<< temp->city2 << " distance: "<< temp->distance << " time: "<< temp->time << " gold: "<< temp->gold << " trolls: "<< temp->trolls<< endl;
+        temp=temp->next;
+    }
 }
 /*distance*/
 void setDistance( int len ) {
@@ -164,6 +185,8 @@ int numerical_data(char* ch, int start){
 /*main*/
 int main () {
 
+    List SegmentList;
+    
     string line;
     ifstream myfile ("map.txt");
     if (myfile.is_open())
@@ -175,37 +198,38 @@ int main () {
             strcpy (cstr, line.c_str());
             
             int len = line.length();
-            cout<< "line len : "<< len<< endl;
+           // cout<< "line len : "<< len<< " last char: "<<cstr[len-1]<<endl;
             char * p = strtok (cstr," ");
+             SegmentList.create_Node();
+             SegmentList.insert_first();
             while (p!=0)
             {
                 int counter =0;
                 while (counter<sizeof(cstr)){
-                    // string str(cstr);
-                    //string a = str.substr(4,6);
+                /*
                     temp_city1=cstr[0];
                     temp_city2=cstr[2];
                     temp_distance = numerical_data(cstr,4);
                     temp_time = numerical_data(cstr, 8);
                     temp_gold = numerical_data(cstr, 12);
-                    //temp_trolls = numerical_data(cstr, 14);
-                    /*char h[4]= {'\0'};
-                    for (int f =0; f<3;f++){
-                        h[f]=cstr [14+f];
-                    }
-                    temp_trolls=atoi(h);*/
-                    temp_trolls = numerical_data(cstr,len-3);
-                    //cout << str << '\n';
-                    //temp_distance =atoi(p+3);
-                    counter ++;
+                    temp_trolls =atoi(&cstr[len-1]);
+                    counter++;*/
+                    SegmentList.head->city1=cstr[0];
+                    SegmentList.head->city2=cstr[2];
+                    SegmentList.head->distance= numerical_data(cstr,4);
+                    SegmentList.head->time= numerical_data(cstr, 8);
+                    SegmentList.head->gold = numerical_data(cstr, 12);
+                    SegmentList.head->trolls=atoi(&cstr[len-1]);
+                    counter++;
+                   
+                  
                 }
                //cout << p << '\n';
                 p = strtok(NULL," ");
                
+               
                 
             }
-            
-            cout<< "city1: "<< temp_city1<< " city2: "<< temp_city2 << " distance: "<< temp_distance << " time: "<< temp_time << " gold: "<< temp_gold << " trolls: "<< temp_trolls<< endl;
            
           
             delete[] cstr;
@@ -214,6 +238,6 @@ int main () {
     }
     
     else cout << "Unable to open file";
-    
+    SegmentList.display();
     return 0;
 }
