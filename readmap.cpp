@@ -51,7 +51,6 @@ public:
         tail=NULL;
         number_of_seg=0;
     }
-    void create_Node();
     void display();
     void insert_first();
     void delete_last();
@@ -59,6 +58,7 @@ public:
 
 void List::insert_first()
 {
+    number_of_seg++;
     Segment *temp=new Segment;
     temp->city1=temp_city1;
     temp->city2=temp_city2;
@@ -66,6 +66,7 @@ void List::insert_first()
     temp->time=temp_time;
     temp->gold=temp_gold;
     temp->trolls=temp_trolls;
+    temp->id=number_of_seg;
     temp->next=head;
     head=temp;
     
@@ -86,33 +87,6 @@ void List::delete_last()
     tail=previous;
     previous->next=NULL;
     delete current;
-}
-
-/*create_node*/
-void List::create_Node() {
-    number_of_seg++;
-    Segment *temp=new Segment;
-    temp->city1=temp_city1;
-    temp->city2=temp_city2;
-    temp->distance=temp_distance;
-    temp->time=temp_time;
-    temp->gold=temp_gold;
-    temp->trolls=temp_trolls;
-    temp->id=number_of_seg;
-    temp->next=NULL;
-    if(head==NULL)
-    {
-        head=temp;
-        tail=temp;
-        temp=NULL;
-    }
-    else
-    {
-        tail->next=temp;
-        tail=temp;
-    }
-    
-    cout << "Node Segment created. " << endl;
 }
 
 /*display node*/
@@ -200,20 +174,13 @@ int main () {
             int len = line.length();
            // cout<< "line len : "<< len<< " last char: "<<cstr[len-1]<<endl;
             char * p = strtok (cstr," ");
-             SegmentList.create_Node();
-             SegmentList.insert_first();
+            SegmentList.insert_first();
+           
+             //SegmentList.insert_first();
             while (p!=0)
             {
                 int counter =0;
                 while (counter<sizeof(cstr)){
-                /*
-                    temp_city1=cstr[0];
-                    temp_city2=cstr[2];
-                    temp_distance = numerical_data(cstr,4);
-                    temp_time = numerical_data(cstr, 8);
-                    temp_gold = numerical_data(cstr, 12);
-                    temp_trolls =atoi(&cstr[len-1]);
-                    counter++;*/
                     SegmentList.head->city1=cstr[0];
                     SegmentList.head->city2=cstr[2];
                     SegmentList.head->distance= numerical_data(cstr,4);
