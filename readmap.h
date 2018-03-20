@@ -34,9 +34,8 @@ Segment::Segment(void){
 }
 
 /*Linked List of Segments */
-class List
+struct List
 {
-public:
     int number_of_seg;
     Segment * head, * tail;
     List()

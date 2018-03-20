@@ -27,6 +27,7 @@ struct Graph
     int number;
     Graph();
     Graph(int v);
+    Graph(List segments);
     void addEdge(Segment s);
     void display(void);
     
@@ -40,14 +41,33 @@ Graph::Graph (int v){
         this->list[i].head = NULL;
     }
 }
+
+Graph::Graph (List  segments){
+    number=segments.number_of_seg;
+    list = &segments;
+}
+
 // Adds an edge to an undirected graph
 void Graph::addEdge(Segment s){
-
 }
 
 void Graph::display(void){
+    
+    Segment *temp=new Segment;
+    temp=list->head;
+    string* og;
+    string * dest;
+    
+    cout<< number << endl;
+    
+    while(temp!=NULL)
+    {
+        og = &temp->city1;
+        dest = &temp->city2;
+        cout << og[0] <<" to "<<dest[0]<<endl;
+        temp=temp->next;
+    }
 }
-
 /*
 Shortest Hop Path (SHP): This algorithm finds the shortest path from source to destination, where the length of a path refers to the number of hops (i.e., links) traversed. Note that this algorithm ignores the physical distance, travel time, gold coins, and trolls for each link.*/
 void shp(){
@@ -77,6 +97,8 @@ int main () {
     ListLocation locations= read_locations();
     List map =read_map();
     ListHomes contacts =  read_contacts();
+    Graph graph(map);
+    graph.display();
    /*
     contacts.display();
     map.display();
