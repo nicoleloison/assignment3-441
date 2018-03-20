@@ -91,6 +91,8 @@ void List::display()
         cout<< "city1: "<< temp->city1<< " city2: "<< temp->city2 << " distance: "<< temp->distance << " time: "<< temp->time << " gold: "<< temp->gold << " trolls: "<< temp->trolls<< endl;
         temp=temp->next;
     }
+    delete temp;
+    temp=NULL;
 }
 /*distance*/
 int set_large(int len) {
@@ -169,6 +171,7 @@ List read_map()
             
             
             delete[] cstr;
+            delete p;
         }
         myfile.close();
     }

@@ -10,12 +10,13 @@
 #include <string>
 #include <vector>
 #include <stdio.h>
-#include  <algorithm>
+
 #include "readcontacts.h"
 #include "readmap.h"
 #include "readlocations.h"
 
 using namespace std;
+
 void shp();
 void sdp();
 void stp();
@@ -55,18 +56,28 @@ void Graph::display(void){
     
     Segment *temp=new Segment;
     temp=list->head;
-    string* og;
-    string * dest;
-    
-    cout<< number << endl;
+    string cstr[6];
     
     while(temp!=NULL)
     {
-        og = &temp->city1;
-        dest = &temp->city2;
-        cout << og[0] <<" to "<<dest[0]<<endl;
+        cstr[0].assign(temp->city1);
+        cstr[1].assign(temp->city2);
+        cstr[2].assign(to_string(temp->distance));
+        cstr[3].assign(to_string(temp->time));
+        cstr[4].assign(to_string(temp->gold));
+        cstr[5].assign(to_string(temp->trolls));
+        
+        cout << cstr[0] <<" and "<<cstr[1]<<" are "<<
+        cstr[2]<<" apart and there is "<<
+        cstr[4]<<" gold coins and "<<cstr[3]<<" trolls."<<endl;
         temp=temp->next;
     }
+    delete temp;
+    temp=NULL;
+    for (int j = 0; j<6;j++){
+           cstr[j].clear();
+    }
+
 }
 /*
 Shortest Hop Path (SHP): This algorithm finds the shortest path from source to destination, where the length of a path refers to the number of hops (i.e., links) traversed. Note that this algorithm ignores the physical distance, travel time, gold coins, and trolls for each link.*/
