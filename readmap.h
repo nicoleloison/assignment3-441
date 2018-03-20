@@ -17,7 +17,8 @@ int set_large( int len );
 int set_medium (int g);
 int set_small (int t);
 int numerical_data(char* ch, int start);
-class City;
+class List;
+List read_map();
 
 /***Segment Object**/
 struct Segment {
@@ -88,7 +89,6 @@ void List::display()
     temp=head;
     while(temp!=NULL)
     {
-        cout<<"seg id: "<<temp->id<<" out of: "<<number_of_seg<<endl;
         cout<< "city1: "<< temp->city1<< " city2: "<< temp->city2 << " distance: "<< temp->distance << " time: "<< temp->time << " gold: "<< temp->gold << " trolls: "<< temp->trolls<< endl;
         temp=temp->next;
     }
@@ -131,4 +131,49 @@ int numerical_data(char* ch, int start){
         l[a]=ch [start+a];
     }
     return atoi(l);
+}
+/*TODO RETURNS LIST SEGM*/
+List read_map()
+{
+    List SegmentList;
+    
+    string line;
+    ifstream myfile ("map.txt");
+    if (myfile.is_open())
+    {
+        while ( getline (myfile,line) )
+        {
+            
+            char * cstr = new char [line.length()+1];
+            strcpy (cstr, line.c_str());
+            
+            int len = line.length();
+            char * p = strtok (cstr," ");
+            SegmentList.insert_first();
+            
+            while (p!=0)
+            {
+                int counter =0;
+                while (counter<sizeof(cstr)){
+                    SegmentList.head->city1=cstr[0];
+                    SegmentList.head->city2=cstr[2];
+                    SegmentList.head->distance= set_large(numerical_data(cstr,4));
+                    SegmentList.head->time= set_large(numerical_data(cstr, 8));
+                    SegmentList.head->gold = set_medium(numerical_data(cstr, 12));
+                    SegmentList.head->trolls=set_small(atoi(&cstr[len-1]));
+                    counter++;
+                    
+                }
+                p = strtok(NULL," ");
+                
+            }
+            
+            
+            delete[] cstr;
+        }
+        myfile.close();
+    }
+    
+    else cout << "Unable to open file";
+    return SegmentList;
 }

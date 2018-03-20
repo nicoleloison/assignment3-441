@@ -12,8 +12,8 @@
 #include <stdio.h>
 
 using namespace std;
-
-int numerical_data(char* ch, int start);
+struct ListLocation;
+ListLocation read_locations();
 
 /***Hobbit Object**/
 struct Location {
@@ -29,23 +29,24 @@ Location::Location(void){
 }
 
 /*Linked List of Locations */
-class List
+struct ListLocation
 {
-public:
     int number;
     Location * head, * tail;
-    List()
-    {
-        head=NULL;
-        tail=NULL;
-        number=0;
-    }
+    ListLocation();
     void display();
     void insert_first();
     void delete_last();
 };
 
-void List::insert_first()
+ListLocation::ListLocation(void)
+{
+    head=NULL;
+    tail=NULL;
+    number=0;
+}
+
+void ListLocation::insert_first()
 {
     number++;
     Location *temp=new Location;
@@ -57,7 +58,7 @@ void List::insert_first()
     head=temp;
 }
 
-void List::delete_last()
+void ListLocation::delete_last()
 {
     Location *current=new Location;
     Location *previous=new Location;
@@ -74,7 +75,7 @@ void List::delete_last()
 
 /*display node*/
 
-void List::display()
+void ListLocation::display()
 {
     Location *temp=new Location;
     temp=head;
@@ -85,10 +86,30 @@ void List::display()
     }
 }
 
-int numerical_data(char* ch, int start){
-    char l[4]= {'\0'};
-    for (int a =0; a<3;a++){
-        l[a]=ch [start+a];
+ListLocation read_locations(){
+    ListLocation list;
+    
+    string line;
+    ifstream myfile ("locations.txt");
+    if (myfile.is_open())
+    {
+        while ( getline (myfile,line) )
+        {
+            
+            char * cstr = new char [line.length()+1];
+            strcpy (cstr, line.c_str());
+            
+            int len = line.length();
+            char * p = strtok (cstr," ");
+            list.insert_first();
+            list.head->owner = p;
+            list.head->city=cstr[len-1];
+            
+            delete[] cstr;
+        }
+        myfile.close();
     }
-    return atoi(l);
+    
+    else cout << "Unable to open file locations.txt";
+    return  list;
 }

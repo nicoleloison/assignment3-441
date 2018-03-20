@@ -12,11 +12,10 @@
 #include <stdio.h>
 
 using namespace std;
+struct ListHomes;
+ListHomes read_contacts();
 
-int numerical_data(char* ch, int start);
-void read_contacts();
-
-/***Home Object**/
+/***Hobbit Object**/
 struct Home {
     int id;
     string owner, city;
@@ -30,23 +29,23 @@ Home::Home(void){
 }
 
 /*Linked List of Homes */
-class List
+struct ListHomes
 {
-public:
+    ListHomes();
     int number;
     Home * head, * tail;
-    List()
-    {
-        head=NULL;
-        tail=NULL;
-        number=0;
-    }
     void display();
     void insert_first();
     void delete_last();
 };
 
-void List::insert_first()
+ListHomes::ListHomes(void)
+{
+    head=NULL;
+    tail=NULL;
+    number=0;
+}
+void ListHomes::insert_first()
 {
     number++;
     Home *temp=new Home;
@@ -58,7 +57,7 @@ void List::insert_first()
     head=temp;
 }
 
-void List::delete_last()
+void ListHomes::delete_last()
 {
     Home *current=new Home;
     Home *previous=new Home;
@@ -75,7 +74,7 @@ void List::delete_last()
 
 /*display node*/
 
-void List::display()
+void ListHomes::display()
 {
     Home *temp=new Home;
     temp=head;
@@ -86,16 +85,8 @@ void List::display()
     }
 }
 
-int numerical_data(char* ch, int start){
-    char l[4]= {'\0'};
-    for (int a =0; a<3;a++){
-        l[a]=ch [start+a];
-    }
-    return atoi(l);
-}
-
-void read_contacts(){
-    List HomeList;
+ListHomes read_contacts(){
+    ListHomes HomeList;
     
     string line;
     ifstream myfile ("contacts.txt");
@@ -119,8 +110,8 @@ void read_contacts(){
     }
     
     else cout << "Unable to open file contacts.txt";
-    HomeList.display();
-    return 0;
+    
+    return HomeList;
 }
 
 
