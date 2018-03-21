@@ -13,12 +13,16 @@
 
 using namespace std;
 struct ListLocation;
+ListLocation  filter_by_city(string filter, ListLocation * list);
+ListLocation  filter_by_name(string filter, ListLocation * list);
+string * get_all_names (ListLocation * list);
 ListLocation read_locations();
 
-/***Hobbit Object**/
+
+/***Location Object**/
 struct Location {
     int id;
-    string owner, city;
+    string first_name, city;
     
     Location();
     Location * next;
@@ -36,6 +40,7 @@ struct ListLocation
     ListLocation();
     void display();
     void insert_first();
+    void append(Location ** head_ref, Location s);
     void delete_last();
 };
 
@@ -51,12 +56,40 @@ void ListLocation::insert_first()
     number++;
     Location *temp=new Location;
     
-    temp->owner='\0';
+    temp->first_name='\0';
     temp->city='\0';
     temp->id=number;
     temp->next=head;
     head=temp;
 }
+
+void ListLocation::append(Location ** head_ref, Location s)
+{
+    number++;
+    Location *new_node= (struct Location*) malloc(sizeof(struct Location));
+    Location *last = *head_ref;
+    
+    new_node->first_name = s.first_name;
+    new_node->city=s.city;
+    new_node->id = number;
+    
+    new_node->next = NULL;
+    
+    if (*head_ref == NULL)
+    {
+        *head_ref = new_node;
+        return;
+    }
+    
+    while (last->next != NULL)
+        last = last->next;
+    
+    last->next = new_node;
+    return;
+    
+    
+}
+
 
 void ListLocation::delete_last()
 {
@@ -81,9 +114,77 @@ void ListLocation::display()
     temp=head;
     while(temp!=NULL)
     {
-        cout<< ""<<temp->owner<<" is currently in "<< temp->city << endl;
+        cout<<temp->first_name<<" lives in "<< temp->city << endl;
         temp=temp->next;
     }
+}
+
+ListLocation filter_by_name(string filter, ListLocation * list){
+    ListLocation result;
+    Location *temp=new Location;
+    temp=list->head;
+    string str;
+    
+    while(temp!=NULL)
+    {
+        str.assign(temp->first_name);
+        if (str.compare(filter)==0){
+           result.append(&result.head, * temp);
+        }
+        
+        temp=temp->next;
+    }
+    delete temp;
+    temp=NULL;
+    
+    str.clear();
+    return result;
+}
+
+ListLocation filter_by_city(string filter, ListLocation * list){
+    ListLocation result;
+    Location *temp=new Location;
+    temp=list->head;
+    string str;
+    
+    while(temp!=NULL)
+    {
+        str.assign(temp->city);
+        if (str.compare(filter)==0){
+             result.append(&result.head, * temp);
+        }
+        
+        temp=temp->next;
+    }
+    delete temp;
+    temp=NULL;
+    
+    str.clear();
+    return result;
+}
+
+string * get_all_names(ListLocation * list){
+    string  * result = new string[list->number];
+    size_t size = sizeof(result)/ sizeof(string);
+    Location *temp=new Location;
+    temp=list->head;
+    int index =0;
+    
+    while(temp!=NULL)
+    {
+        for (int i =0; i< size; i++){
+            if(result[i].compare(temp->first_name)){
+                break;
+            }
+            else
+                result[i].assign(temp->first_name);
+        }
+        temp=temp->next;
+    }
+    delete temp;
+    temp=NULL;
+    
+    return result;
 }
 
 ListLocation read_locations(){
@@ -102,7 +203,7 @@ ListLocation read_locations(){
             int len = line.length();
             char * p = strtok (cstr," ");
             list.insert_first();
-            list.head->owner = p;
+            list.head->first_name = p;
             list.head->city=cstr[len-1];
             
             delete[] cstr;

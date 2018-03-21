@@ -24,28 +24,29 @@ void ftp();
 
 struct Graph
 {
-    List * list;
+    List list;
     int number;
     Graph();
-    Graph(int v);
     Graph(List segments);
     void addEdge(Segment s);
     void display(void);
     
+    
 };
 Graph::Graph(){}
+/*
 Graph::Graph (int v){
-    this->number=v;
-    this->list = (struct List*) malloc(v * sizeof(struct List));
+    number=v;
+    list = (struct List) malloc(v * sizeof(struct List));
     // Initialize each adjacency list as empty by making head as NULL
     for (int i = 0; i < v; ++i){
         this->list[i].head = NULL;
     }
 }
-
+*/
 Graph::Graph (List  segments){
     number=segments.number_of_seg;
-    list = &segments;
+    list = segments;
 }
 
 // Adds an edge to an undirected graph
@@ -55,7 +56,7 @@ void Graph::addEdge(Segment s){
 void Graph::display(void){
     
     Segment *temp=new Segment;
-    temp=list->head;
+    temp=list.head;
     string cstr[6];
     
     while(temp!=NULL)
@@ -79,6 +80,7 @@ void Graph::display(void){
     }
 
 }
+
 /*
 Shortest Hop Path (SHP): This algorithm finds the shortest path from source to destination, where the length of a path refers to the number of hops (i.e., links) traversed. Note that this algorithm ignores the physical distance, travel time, gold coins, and trolls for each link.*/
 void shp(){
@@ -102,15 +104,51 @@ void ftp(){
     
 }
 
-
 /*main*/
 int main () {
     ListLocation locations= read_locations();
     List map =read_map();
     ListHomes contacts =  read_contacts();
     Graph graph(map);
-    graph.display();
-   /*
+    ListLocation *ll;
+    ll=&locations;
+    string * names = get_all_names(ll);
+    ListLocation Dori = filter_by_name("Dori", ll);
+    ListLocation Bilbo = filter_by_name("Bilbo", ll);
+
+    
+    List *l ;
+    l=&graph.list;
+
+    
+    List gl = filter (Dori.head->city, l);
+    // cout << "cal" <<endl;
+    //cal.display();
+    List * cp = & gl;
+    
+    List win = filter (Bilbo.head->city, l);
+    List * wp = &win;
+   
+    List common = find_path (cp, wp);
+    common.display();
+    
+
+    //List we = filter ("S", helper);
+
+    /*
+    List temp = * helper;
+    int counter=0;
+
+    while (temp.head->city1.compare("C")!=0 && temp.head->city2.compare("C")!=0 && counter < 20){
+      //  temp = filter(map.head->city1, l);
+       // cout<< "only kept those with W ?"<<endl;
+        counter ++;
+    }
+*/
+   // map.display();
+    //try with winnipeg:
+     //List to_w = filter("W", l);
+    /*
     contacts.display();
     map.display();
     locations.display();*/

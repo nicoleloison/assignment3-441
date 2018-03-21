@@ -18,7 +18,7 @@ ListHomes read_contacts();
 /***Hobbit Object**/
 struct Home {
     int id;
-    string owner, city;
+    string first_name, last_name;
     
     Home();
     Home * next;
@@ -50,8 +50,8 @@ void ListHomes::insert_first()
     number++;
     Home *temp=new Home;
     
-    temp->owner='\0';
-    temp->city='\0';
+    temp->first_name='\0';
+    temp->last_name='\0';
     temp->id=number;
     temp->next=head;
     head=temp;
@@ -80,7 +80,7 @@ void ListHomes::display()
     temp=head;
     while(temp!=NULL)
     {
-        cout<< ""<<temp->owner<<" lives in "<< temp->city << endl;
+        cout<< "First name: "<<temp->first_name<<"last name: "<< temp->last_name << endl;
         temp=temp->next;
     }
 }
@@ -101,8 +101,8 @@ ListHomes read_contacts(){
             int len = line.length();
             char * p = strtok (cstr," ");
             HomeList.insert_first();
-            HomeList.head->owner = p;
-            HomeList.head->city=cstr[len-1];
+            HomeList.head->first_name = p;
+            HomeList.head->last_name=cstr[len-1];
             
             delete[] cstr;
         }

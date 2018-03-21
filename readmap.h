@@ -18,7 +18,10 @@ int set_medium (int g);
 int set_small (int t);
 int numerical_data(char* ch, int start);
 class List;
+List filter(string filter, List * list);
+List find_path(string filter, List * list);
 List read_map();
+
 
 /***Segment Object**/
 struct Segment {
@@ -26,12 +29,25 @@ struct Segment {
     int distance, time, gold, trolls, id;
     
     Segment();
+    Segment(string c1, string c2, int d, int ti, int g, int tr);
     Segment * next;
     
 };
 Segment::Segment(void){
     /*empty constructor*/
 }
+
+Segment::Segment(string c1, string c2, int d, int ti, int g, int tr){
+    city1=c1;
+    city2=c2;
+    distance=d;
+    time=ti;
+    gold=g;
+    trolls=tr;
+    id =0;
+    next=NULL;
+}
+
 
 /*Linked List of Segments */
 struct List
@@ -45,9 +61,64 @@ struct List
         number_of_seg=0;
     }
     void display();
+    void insert(Segment * s);
+    void append(Segment ** head_ref, Segment s);
     void insert_first();
     void delete_last();
 };
+
+void List::append(Segment ** head_ref, Segment s)
+{
+    number_of_seg++;
+    /* 2. allocate new node */
+    Segment *new_node= (struct Segment*) malloc(sizeof(struct Segment));
+    Segment *last = *head_ref;
+    
+    new_node->city1=s.city1;
+    new_node->city2=s.city2;
+    new_node->distance=s.distance;
+    new_node->gold=s.gold;
+    new_node->time=s.time;
+    new_node->trolls=s.trolls;
+    new_node->id = number_of_seg;
+    
+    new_node->next = NULL;
+    
+    if (*head_ref == NULL)
+    {
+        *head_ref = new_node;
+        return;
+    }
+
+    while (last->next != NULL)
+        last = last->next;
+
+    last->next = new_node;
+    return;
+    
+    
+}
+
+void List::insert(Segment* s)
+{
+    if (head == NULL){
+        number_of_seg++;
+        s->next=head;
+        head=s;
+    }
+    else{
+        number_of_seg++;
+        Segment *temp=new Segment;
+        temp = head;
+        while(head->next !=NULL){
+            temp = temp->next;
+        }
+        temp->next = s;
+        s->next = NULL;
+    }
+
+    
+}
 
 void List::insert_first()
 {
@@ -88,12 +159,13 @@ void List::display()
     temp=head;
     while(temp!=NULL)
     {
-        cout<< "city1: "<< temp->city1<< " city2: "<< temp->city2 << " distance: "<< temp->distance << " time: "<< temp->time << " gold: "<< temp->gold << " trolls: "<< temp->trolls<< endl;
+        cout<<" "<< temp->city1 << " - "<< temp->city2 << " ,distance: "<< temp->distance << " time: "<< temp->time << " gold: "<< temp->gold << " trolls: "<< temp->trolls<< endl;
         temp=temp->next;
     }
     delete temp;
     temp=NULL;
 }
+
 /*distance*/
 int set_large(int len) {
     if (len< 0 || len > 1000){
@@ -133,7 +205,151 @@ int numerical_data(char* ch, int start){
     }
     return atoi(l);
 }
-/*TODO RETURNS LIST SEGM*/
+/*filters the list with only the ones having the city*/
+List filter(string filter, List *list){
+   
+    List result;
+    Segment *temp=new Segment;
+    temp=list->head;
+    string str[6];
+    
+    while(temp!=NULL)
+    {
+  
+        str[0].assign(temp->city1);
+        str[1].assign(temp->city2);
+        str[2].assign(to_string(temp->distance));
+        str[3].assign(to_string(temp->time));
+        str[4].assign(to_string(temp->gold));
+        str[5].assign(to_string(temp->trolls));
+        
+        
+        if (str[0].compare(filter)==0||str[1].compare(filter)==0 ){
+            //Segment sa = Segment(str[0], str[1], atoi(str[2].c_str()),  atoi(str[3].c_str()),  atoi(str[4].c_str()),  atoi(str[5].c_str()));
+            //cout <<"filtered: " <<str[0]<< " - "<<str[1]<<" with dist "<< str[2]<<endl;
+            result.append(&result.head, * temp);
+        }
+        
+      temp=temp->next;
+    }
+    delete temp;
+    temp=NULL;
+    
+    for (int j = 0; j<6;j++){
+        str[j].clear();
+    }
+    return result;
+}
+
+List find_path(List * a, List *b){
+    List common;
+    Segment *t1=new Segment;
+    t1=a->head;
+    int counter =0;
+    string str1[6];
+    string str2[6];
+    
+    while(t1!=NULL && counter <10)
+    {
+        counter++;
+        
+        str1[0].assign(t1->city1);
+        str1[1].assign(t1->city2);
+        str1[2].assign(to_string(t1->distance));
+        str1[3].assign(to_string(t1->time));
+        str1[4].assign(to_string(t1->gold));
+        str1[5].assign(to_string(t1->trolls));
+
+        Segment *t2=new Segment;
+        t2=b->head;
+        int ctr = 0;
+
+        while (t2!=NULL && ctr<5) {
+            ctr ++;
+            
+            str2[0].assign(t2->city1);
+            str2[1].assign(t2->city2);
+            str2[2].assign(to_string(t2->distance));
+            str2[3].assign(to_string(t2->time));
+            str2[4].assign(to_string(t2->gold));
+            str2[5].assign(to_string(t2->trolls));
+        
+            
+            if (str1[0].compare(str2[0])==0)
+            {
+                //ex
+                //in a winnipeg: w - t
+                //in b yyc:  w - c
+                Segment sa = Segment(str1[1], str1[0], atoi(str1[2].c_str()),  atoi(str1[3].c_str()),  atoi(str1[4].c_str()),  atoi(str1[5].c_str()));
+                Segment sb = Segment(str2[0], str2[1], atoi(str2[2].c_str()),  atoi(str2[3].c_str()),  atoi(str2[4].c_str()),  atoi(str2[5].c_str()));
+                common.append( &common.head, sa);
+                common.append( &common.head, sb);
+                common.number_of_seg--;
+                break;
+                //t - w , w - c ???
+               
+            }
+            else if(str1[0].compare(str2[1])==0) {
+                       cout<<"yass 2 "<<endl;/*
+                //always srtarting from a so ... no ?
+                //ex
+                //in winnipeg: w - t
+                //in yyc:  c - w
+                Segment sa = new Segment(str1[1], str1[0], atoi(str1[2].c_str()),  atoi(str1[3].c_str()),  atoi(str1[4].c_str()),  atoi(str1[5].c_str()));
+                Segment sb = new Segment(str2[1], str2[0], atoi(str2[2].c_str()),  atoi(str2[3].c_str()),  atoi(str2[4].c_str()),  atoi(str2[5].c_str()));
+                common.insert(sb);
+                common insert(sa);
+                //t - w , w -c*/
+            }
+            else if(str1[1].compare(str2[0])==0) {
+                //ex
+                //in winnipeg: w - c
+                //in yyc:  c - t
+              //  cout <<"adding format  //w -c , c - t " << endl;
+                Segment sa = Segment(str1[0], str1[1], atoi(str1[2].c_str()),  atoi(str1[3].c_str()),  atoi(str1[4].c_str()),  atoi(str1[5].c_str()));
+                Segment sb = Segment(str2[0], str2[1], atoi(str2[2].c_str()),  atoi(str2[3].c_str()),  atoi(str2[4].c_str()),  atoi(str2[5].c_str()));
+                common.append( &common.head, sa);
+                common.append( &common.head, sb);
+                common.number_of_seg--;
+                break;
+                //w -c , c - t
+            }
+            
+            else if(str1[1].compare(str2[1])==0){
+               // cout <<"adding format  //w -c , c - t " << endl;
+                //ex
+                //in winnipeg: w - t
+                //in yyc:  c - t
+                
+                Segment sa = Segment(str1[0], str1[1], atoi(str1[2].c_str()),  atoi(str1[3].c_str()),  atoi(str1[4].c_str()),  atoi(str1[5].c_str()));
+                Segment sb = Segment(str2[1], str2[2], atoi(str2[2].c_str()),  atoi(str2[3].c_str()),  atoi(str2[4].c_str()),  atoi(str2[5].c_str()));
+                common.append(&common.head, sa);
+                common.append( &common.head, sb);
+                common.number_of_seg--;
+                break;
+                // w - t ,t -c
+            }
+            t2=t2->next;
+        }
+        
+        for (int j = 0; j<6;j++){
+            str2[j].clear();
+        }
+        
+        t1= t1->next;
+    }
+    
+    delete t1;
+    t1=NULL;
+    
+    for (int j = 0; j<6;j++){
+        str1[j].clear();
+    }
+    cout<<"Path took "<<common.number_of_seg<<" hops from "<<a->head->city1<<endl;
+    return common;
+}
+
+/* RETURNS LIST SEGM*/
 List read_map()
 {
     List SegmentList;
