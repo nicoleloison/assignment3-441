@@ -99,6 +99,9 @@ string * ListLocation::get_all_names(void){
     int index =0;
     
     while(temp!=NULL)
+        if (temp->first_name.compare("Bilbo")==0){
+            break;
+        }
     {
         result[index].assign(temp->first_name);
         //cout<< "name: "<<result[index]<<endl;
@@ -121,8 +124,11 @@ string * ListLocation::get_all_dest(void){
     
     while(temp!=NULL)
     {
+        if (temp->first_name.compare("Bilbo")==0){
+            break;
+        }
         result[index].assign(temp->city);
-        //cout<< "src: "<<result[index]<<endl;
+        cout<< "src: "<<result[index]<<endl;
         index++;
         temp=temp->next;
     }

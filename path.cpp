@@ -106,6 +106,7 @@ void ftp(){
 
 /*main*/
 int main () {
+    
     ListLocation locations= read_locations();
     List map =read_map();
     ListHomes contacts =  read_contacts();
@@ -113,46 +114,36 @@ int main () {
     ListLocation *ll;
     ll=&locations;
     string * names = locations.get_all_names();
+    size_t sizen = sizeof(names)/ sizeof(string);;
     string * dest =  locations.get_all_dest();
-   // ListLocation dests = get_all_dest(names, ll);
-    ListLocation Dori = filter_by_name("Dori", ll);
-    ListLocation Bilbo = filter_by_name("Bilbo", ll);
+    size_t sized = sizeof(dest)/ sizeof(string);;
 
-    
     List *l ;
     l=&graph.list;
-
     
-    List gl = filter (Dori.head->city, l);
-    // cout << "cal" <<endl;
-    //cal.display();
-    List * cp = & gl;
-    
+    ListLocation Bilbo = filter_by_name("Bilbo", ll);
     List win = filter (Bilbo.head->city, l);
     List * wp = &win;
-   
-    List common = find_path (cp, wp);
-    common.display();
+    win.display();
+
+    ListLocation Dori = filter_by_name("Dori", ll);
+    List dori = filter (Dori.head->city, l);
+    List * dr = &dori;
+    dori.display();
     
-
-    //List we = filter ("S", helper);
-
-    /*
-    List temp = * helper;
-    int counter=0;
-
-    while (temp.head->city1.compare("C")!=0 && temp.head->city2.compare("C")!=0 && counter < 20){
-      //  temp = filter(map.head->city1, l);
-       // cout<< "only kept those with W ?"<<endl;
-        counter ++;
+    List common = find_path (dr, wp);
+    common.display();
+ 
+    //for each names, filter by name
+    for (int i =0; i< sizen ; i++ ){
+        ListLocation Dwarf = filter_by_name(names[i], ll);
+        List d = filter (Dwarf.head->city, l);
+        List * dw = &d;
+        common = find_path (dw, wp);
+        common.display();
+        cout << " \n "<<endl;
+        delete dw;
     }
-*/
-   // map.display();
-    //try with winnipeg:
-     //List to_w = filter("W", l);
-    /*
-    contacts.display();
-    map.display();
-    locations.display();*/
+
     return 0;
 }

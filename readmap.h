@@ -9,7 +9,9 @@
 #include <fstream>
 #include <string>
 #include <vector>
+#include <map>
 #include <stdio.h>
+#include <stdbool.h>
 
 using namespace std;
 
@@ -18,9 +20,82 @@ int set_medium (int g);
 int set_small (int t);
 int numerical_data(char* ch, int start);
 class List;
+struct Segment;
+struct City;
+struct Edge;
 List filter(string filter, List * list);
-List find_path(string filter, List * list);
+List find_path( List * a, List * b);
+bool connected (Segment * a, Segment * b, List *l);
 List read_map();
+
+struct City {
+    typedef pair<int, City*> ve;
+    vector<ve> adj; //cost of edge, destination vertex
+    string city;
+    City(string s) : city(s) {}
+};
+
+
+class Graph
+{
+public:
+    typedef map<string, vertex *> vmap;
+    vmap work;
+    void addcity(const string&);
+    void addedge(const string& from, const string& to, double cost);
+};
+
+void Graph::addcity(const string &city)
+{
+    vmap::iterator itr = work.find(city);
+    if (itr == work.end())
+    {
+        City *v;
+        v = new City(city);
+        work[city] = v;
+        return;
+    }
+    cout << "\nVertex already exists!";
+}
+
+void graph::addedge(const string& from, const string& to, double cost)
+{
+    City *f = (work.find(from)->second);
+    City *t = (work.find(to)->second);
+    pair<int, City *> edge = make_pair(cost, t);
+    f->adj.push_back(edge);
+}
+
+class graph
+{
+public:
+    typedef map<string, City *> vmap;
+    vmap work;
+    void addcity(const string&);
+    void addedge(const string& from, const string& to, double cost);
+};
+
+
+void graph::addvertex(const string &name)
+{
+    vmap::iterator itr = work.find(name);
+    if (itr == work.end())
+    {
+        vertex *v;
+        v = new vertex(name);
+        work[name] = v;
+        return;
+    }
+    cout << "\nVertex already exists!";
+}
+
+void graph::addedge(const string& from, const string& to, double cost)
+{
+    vertex *f = (work.find(from)->second);
+    vertex *t = (work.find(to)->second);
+    pair<int, vertex *> edge = make_pair(cost, t);
+    f->adj.push_back(edge);
+}
 
 
 /***Segment Object**/
@@ -61,10 +136,8 @@ struct List
         number_of_seg=0;
     }
     void display();
-    void insert(Segment * s);
     void append(Segment ** head_ref, Segment s);
     void insert_first();
-    void delete_last();
 };
 
 void List::append(Segment ** head_ref, Segment s)
@@ -99,27 +172,6 @@ void List::append(Segment ** head_ref, Segment s)
     
 }
 
-void List::insert(Segment* s)
-{
-    if (head == NULL){
-        number_of_seg++;
-        s->next=head;
-        head=s;
-    }
-    else{
-        number_of_seg++;
-        Segment *temp=new Segment;
-        temp = head;
-        while(head->next !=NULL){
-            temp = temp->next;
-        }
-        temp->next = s;
-        s->next = NULL;
-    }
-
-    
-}
-
 void List::insert_first()
 {
     number_of_seg++;
@@ -134,21 +186,6 @@ void List::insert_first()
     temp->id=number_of_seg;
     temp->next=head;
     head=temp;
-}
-
-void List::delete_last()
-{
-    Segment *current=new Segment;
-    Segment *previous=new Segment;
-    current=head;
-    while(current->next!=NULL)
-    {
-        previous=current;
-        current=current->next;
-    }
-    tail=previous;
-    previous->next=NULL;
-    delete current;
 }
 
 /*display node*/
@@ -305,7 +342,6 @@ List find_path(List * a, List *b){
                 //ex
                 //in winnipeg: w - c
                 //in yyc:  c - t
-              //  cout <<"adding format  //w -c , c - t " << endl;
                 Segment sa = Segment(str1[0], str1[1], atoi(str1[2].c_str()),  atoi(str1[3].c_str()),  atoi(str1[4].c_str()),  atoi(str1[5].c_str()));
                 Segment sb = Segment(str2[0], str2[1], atoi(str2[2].c_str()),  atoi(str2[3].c_str()),  atoi(str2[4].c_str()),  atoi(str2[5].c_str()));
                 common.append( &common.head, sa);
@@ -347,6 +383,115 @@ List find_path(List * a, List *b){
     }
     cout<<"Path took "<<common.number_of_seg<<" hops from "<<a->head->city1<<endl;
     return common;
+}
+
+bool connected (Segment * a, Segment * b, List *l){
+    List common;
+    Segment *t1=new Segment;
+    t1=l->head;
+    int counter =0;
+    string str1[6];
+    string str2[6];
+    
+    while(t1!=NULL && counter <10)
+    {
+        counter++;
+        
+        str1[0].assign(t1->city1);
+        str1[1].assign(t1->city2);
+        str1[2].assign(to_string(t1->distance));
+        str1[3].assign(to_string(t1->time));
+        str1[4].assign(to_string(t1->gold));
+        str1[5].assign(to_string(t1->trolls));
+        
+        Segment *t2=new Segment;
+        t2=b->head;
+        int ctr = 0;
+        
+        while (t2!=NULL && ctr<5) {
+            ctr ++;
+            
+            str2[0].assign(t2->city1);
+            str2[1].assign(t2->city2);
+            str2[2].assign(to_string(t2->distance));
+            str2[3].assign(to_string(t2->time));
+            str2[4].assign(to_string(t2->gold));
+            str2[5].assign(to_string(t2->trolls));
+            
+            
+            if (str1[0].compare(str2[0])==0)
+            {
+                //ex
+                //in a winnipeg: w - t
+                //in b yyc:  w - c
+                Segment sa = Segment(str1[1], str1[0], atoi(str1[2].c_str()),  atoi(str1[3].c_str()),  atoi(str1[4].c_str()),  atoi(str1[5].c_str()));
+                Segment sb = Segment(str2[0], str2[1], atoi(str2[2].c_str()),  atoi(str2[3].c_str()),  atoi(str2[4].c_str()),  atoi(str2[5].c_str()));
+                common.append( &common.head, sa);
+                common.append( &common.head, sb);
+                common.number_of_seg--;
+                break;
+                //t - w , w - c ???
+                
+            }
+            else if(str1[0].compare(str2[1])==0) {
+                cout<<"yass 2 "<<endl;/*
+                                       //always srtarting from a so ... no ?
+                                       //ex
+                                       //in winnipeg: w - t
+                                       //in yyc:  c - w
+                                       Segment sa = new Segment(str1[1], str1[0], atoi(str1[2].c_str()),  atoi(str1[3].c_str()),  atoi(str1[4].c_str()),  atoi(str1[5].c_str()));
+                                       Segment sb = new Segment(str2[1], str2[0], atoi(str2[2].c_str()),  atoi(str2[3].c_str()),  atoi(str2[4].c_str()),  atoi(str2[5].c_str()));
+                                       common.insert(sb);
+                                       common insert(sa);
+                                       //t - w , w -c*/
+            }
+            else if(str1[1].compare(str2[0])==0) {
+                //ex
+                //in winnipeg: w - c
+                //in yyc:  c - t
+                //  cout <<"adding format  //w -c , c - t " << endl;
+                Segment sa = Segment(str1[0], str1[1], atoi(str1[2].c_str()),  atoi(str1[3].c_str()),  atoi(str1[4].c_str()),  atoi(str1[5].c_str()));
+                Segment sb = Segment(str2[0], str2[1], atoi(str2[2].c_str()),  atoi(str2[3].c_str()),  atoi(str2[4].c_str()),  atoi(str2[5].c_str()));
+                common.append( &common.head, sa);
+                common.append( &common.head, sb);
+                common.number_of_seg--;
+                break;
+                //w -c , c - t
+            }
+            
+            else if(str1[1].compare(str2[1])==0){
+                // cout <<"adding format  //w -c , c - t " << endl;
+                //ex
+                //in winnipeg: w - t
+                //in yyc:  c - t
+                
+                Segment sa = Segment(str1[0], str1[1], atoi(str1[2].c_str()),  atoi(str1[3].c_str()),  atoi(str1[4].c_str()),  atoi(str1[5].c_str()));
+                Segment sb = Segment(str2[1], str2[2], atoi(str2[2].c_str()),  atoi(str2[3].c_str()),  atoi(str2[4].c_str()),  atoi(str2[5].c_str()));
+                common.append(&common.head, sa);
+                common.append( &common.head, sb);
+                common.number_of_seg--;
+                break;
+                // w - t ,t -c
+            }
+            t2=t2->next;
+        }
+        
+        for (int j = 0; j<6;j++){
+            str2[j].clear();
+        }
+        
+        t1= t1->next;
+    }
+    
+    delete t1;
+    t1=NULL;
+    
+    for (int j = 0; j<6;j++){
+        str1[j].clear();
+    }
+    cout<<"Path took "<<common.number_of_seg<<" hops from "<<a->head->city1<<endl;
+    return common;
+    return false;
 }
 
 /* RETURNS LIST SEGM*/
