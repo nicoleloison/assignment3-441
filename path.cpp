@@ -112,7 +112,9 @@ int main () {
     Graph graph(map);
     ListLocation *ll;
     ll=&locations;
-    string * names = get_all_names(ll);
+    string * names = locations.get_all_names();
+    string * dest =  locations.get_all_dest();
+   // ListLocation dests = get_all_dest(names, ll);
     ListLocation Dori = filter_by_name("Dori", ll);
     ListLocation Bilbo = filter_by_name("Bilbo", ll);
 

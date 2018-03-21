@@ -15,7 +15,6 @@ using namespace std;
 struct ListLocation;
 ListLocation  filter_by_city(string filter, ListLocation * list);
 ListLocation  filter_by_name(string filter, ListLocation * list);
-string * get_all_names (ListLocation * list);
 ListLocation read_locations();
 
 
@@ -42,6 +41,8 @@ struct ListLocation
     void insert_first();
     void append(Location ** head_ref, Location s);
     void delete_last();
+    string * get_all_dest();
+    string * get_all_names();
 };
 
 ListLocation::ListLocation(void)
@@ -90,20 +91,46 @@ void ListLocation::append(Location ** head_ref, Location s)
     
 }
 
-
-void ListLocation::delete_last()
-{
-    Location *current=new Location;
-    Location *previous=new Location;
-    current=head;
-    while(current->next!=NULL)
+string * ListLocation::get_all_names(void){
+    string  * result = new string[number];
+    size_t size = sizeof(result)/ sizeof(string);
+    Location *temp=new Location;
+    temp=head;
+    int index =0;
+    
+    while(temp!=NULL)
     {
-        previous=current;
-        current=current->next;
+        result[index].assign(temp->first_name);
+        //cout<< "name: "<<result[index]<<endl;
+        index++;
+        temp=temp->next;
     }
-    tail=previous;
-    previous->next=NULL;
-    delete current;
+
+    delete temp;
+    temp=NULL;
+    
+    return result;
+}
+
+string * ListLocation::get_all_dest(void){
+    string  * result = new string[number];
+    size_t size = sizeof(result)/ sizeof(string);
+    Location *temp=new Location;
+    temp=head;
+    int index =0;
+    
+    while(temp!=NULL)
+    {
+        result[index].assign(temp->city);
+        //cout<< "src: "<<result[index]<<endl;
+        index++;
+        temp=temp->next;
+    }
+    
+    delete temp;
+    temp=NULL;
+    
+    return result;
 }
 
 /*display node*/
@@ -117,6 +144,9 @@ void ListLocation::display()
         cout<<temp->first_name<<" lives in "<< temp->city << endl;
         temp=temp->next;
     }
+    delete temp;
+    temp=NULL;
+    
 }
 
 ListLocation filter_by_name(string filter, ListLocation * list){
@@ -163,29 +193,6 @@ ListLocation filter_by_city(string filter, ListLocation * list){
     return result;
 }
 
-string * get_all_names(ListLocation * list){
-    string  * result = new string[list->number];
-    size_t size = sizeof(result)/ sizeof(string);
-    Location *temp=new Location;
-    temp=list->head;
-    int index =0;
-    
-    while(temp!=NULL)
-    {
-        for (int i =0; i< size; i++){
-            if(result[i].compare(temp->first_name)){
-                break;
-            }
-            else
-                result[i].assign(temp->first_name);
-        }
-        temp=temp->next;
-    }
-    delete temp;
-    temp=NULL;
-    
-    return result;
-}
 
 ListLocation read_locations(){
     ListLocation list;
