@@ -94,11 +94,11 @@ void dijkstra(int s, int size, int **graph)
         
     }
     
-    cout << "The shortest distance from " << char (67) << " to all the nodes is" << endl;
+    cout << "The minimum value from " << char (67) << " to all the nodes is" << endl;
     for(int i=0;i < size;i++)
     {
         int letter = i + 65;
-        if (dist[i] != INFINITY)
+        if (dist[i] != INFINITY && i != 2)
         cout <<  (char)letter<< " : " << dist[i] << endl;
     }
     cout << endl << endl;
@@ -203,6 +203,9 @@ int main()
     ifstream myfile ("map.txt");
     int LEVELS = 27;
     int** c_d = create2DArray();
+    int** c_t = create2DArray();
+    int** c_g = create2DArray();
+    int** c_tr = create2DArray();
 
     ifstream file ("map.txt");
     if (file.is_open()){
@@ -218,8 +221,10 @@ int main()
             src =cstr[0]-'A';
             dest = cstr[2]-'A';
             distance = set_large(numerical_data(cstr,4));
-          //  cout <<" src : "<< cstr[0]<<" to "<<"dest : "<< cstr[2]<< endl;
             populate(c_d, src, dest, distance);
+            populate(c_t, src , dest, set_large(numerical_data(cstr, 8)) );
+            populate(c_g, src , dest, set_medium(numerical_data(cstr, 12)));
+            populate(c_tr, src , dest, set_small(atoi(&cstr[line.length()-1])));
             
             delete[] cstr;
         
@@ -231,11 +236,15 @@ int main()
     
     
     
-    display(c_d);
-    show(c_d);
+    //display(c_d);
+   // show(c_d);
     int s = 2;
-    
+    cout<< "min distance: "<< endl;
     dijkstra(s, LEVELS, c_d);
+     cout<< "min time: "<< endl;
+    dijkstra(s, LEVELS, c_t);
+    cout<< "min trolls: "<< endl;
+     dijkstra(s, LEVELS, c_tr);
     
     
     delete * c_d;
