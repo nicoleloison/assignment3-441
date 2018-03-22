@@ -329,19 +329,16 @@ int main()
     else cout << "Unable to open file";
         
         int * weights;
-    /*
-    string * results;
-    results->assign("To Calgary, minimizing variable the path are:\n");
-    results->append("From: city name, Number of hops: hops , total distance: dist, total time: t, Gold collected: g, trolls encountered: t");
-    cout << results<< endl;*/
-        // display(c_d);
-        //show(c_d);
 
-       // cout<< "min distance: "<< endl;
-   // weights =
-    assign_variable("variable_distance", c_h, c_d, c_t, c_r);
+    
+    //test with distance
+    assign_variable(variable_distance, c_h, c_d, c_t, c_r);
+    assign_variable("time", c_h, c_d, c_t, c_r);
+    assign_variable("hops", c_h, c_d, c_t, c_r);
+    assign_variable("trolls", c_h, c_d, c_t, c_r);
+    
     //dijkstra("distance", c_d);
-        //cout<< "min time: "<< endl;
+    //cout<< "min time: "<< endl;
     /*
         weights= dijkstra("time", c_t);
        // cout<< "min trolls: "<< endl;
