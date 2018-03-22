@@ -40,7 +40,7 @@ public:
     }
 };
 
-void dijkstra(int s, int size, int **graph)
+unsigned int * dijkstra(int s, int size, int **graph)
 {
     int mini;
     bool *visited = new bool [size];
@@ -101,6 +101,8 @@ void dijkstra(int s, int size, int **graph)
         if (dist[i] != INFINITY && i != 2)
         cout <<  (char)letter<< " : " << dist[i] << endl;
     }
+    
+    return dist;
     cout << endl << endl;
 }
 
@@ -204,7 +206,7 @@ int main()
     int LEVELS = 27;
     int** c_d = create2DArray();
     int** c_t = create2DArray();
-    int** c_g = create2DArray();
+    int** c_h = create2DArray();
     int** c_tr = create2DArray();
 
     ifstream file ("map.txt");
@@ -217,14 +219,16 @@ int main()
             
             char * p = strtok (cstr," ");
             int src, dest, distance;
+            int h=1;
             
             src =cstr[0]-'A';
             dest = cstr[2]-'A';
             distance = set_large(numerical_data(cstr,4));
             populate(c_d, src, dest, distance);
             populate(c_t, src , dest, set_large(numerical_data(cstr, 8)) );
-            populate(c_g, src , dest, set_medium(numerical_data(cstr, 12)));
+            //populate(c_g, src , dest, set_medium(numerical_data(cstr, 12)));
             populate(c_tr, src , dest, set_small(atoi(&cstr[line.length()-1])));
+            populate(c_h, src , dest, h);
             
             delete[] cstr;
         
@@ -234,17 +238,19 @@ int main()
   
     else cout << "Unable to open file";
     
+    unsigned int * weights;
     
-    
-    //display(c_d);
-   // show(c_d);
+    display(c_d);
+    show(c_d);
     int s = 2;
     cout<< "min distance: "<< endl;
-    dijkstra(s, LEVELS, c_d);
+    weights = dijkstra(s, LEVELS, c_d);
      cout<< "min time: "<< endl;
-    dijkstra(s, LEVELS, c_t);
+    weights= dijkstra(s, LEVELS, c_t);
     cout<< "min trolls: "<< endl;
-     dijkstra(s, LEVELS, c_tr);
+     weights= dijkstra(s, LEVELS, c_tr);
+    cout<< "min hops: "<< endl;
+    weights= dijkstra(s, LEVELS, c_h);
     
     
     delete * c_d;
