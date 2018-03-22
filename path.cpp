@@ -14,6 +14,7 @@
 #include "readcontacts.h"
 #include "readmap.h"
 #include "readlocations.h"
+#include "graph.h"
 
 using namespace std;
 
