@@ -42,8 +42,34 @@ public:
     }
 };
 
-int * dijkstra(string v, int **graph)
+int ** assign_variable(string v, int ** hops, int **distance, int **time, int **trolls /*, int **gold*/){
+  
+    if (v.compare("distance")==0) {
+        return distance;
+    }
+    else if (v.compare("time")==0){
+       return time;
+    }
+    else if (v.compare("hops")==0) {
+        cout<<" imp hop hops "<<endl;
+        return hops;
+    }
+    else if (v.compare("trolls")==0){
+       return trolls;
+    }
+    /*
+     else if (v.compare("gold")){
+     dijkstra(v, gold);
+     }*/
+    //default hops
+    else
+        return hops;
+}
+
+
+int * dijkstra(string v, int ** hops, int **distance, int **time, int **trolls /*, int **gold*/)
 {
+    int ** graph = assign_variable(v,hops,distance,time,trolls /*, gold*/);
     int * results;
     int mini;
     bool *visited = new bool [LEVELS];
@@ -132,16 +158,16 @@ int * dijkstra(string v, int **graph)
         
     }
     
-    if (v.compare("distance")) {
+    if (v.compare("distance")==0) {
         d = vr;
     }
-    else if (v.compare("time")){
+    else if (v.compare("time")==0){
         t = vr;
     }
-    else if (v.compare("hops")) {
+    else if (v.compare("hops")==0) {
         h = vr;
     }
-    else if (v.compare("trolls")){
+    else if (v.compare("trolls")==0){
         r = vr;
     }
     
@@ -159,30 +185,6 @@ int * dijkstra(string v, int **graph)
     cout<< endl<<endl;//do not remove or bus fault.
     return results;
    
-}
-
-void assign_variable(string v, int ** hops, int **distance, int **time, int **trolls /*, int **gold*/){
-    cout<<" "<<endl;
-    if (v.compare("distance")==0) {
-        dijkstra(v, distance);
-    }
-    else if (v.compare("time")==0){
-        dijkstra(v, time);
-    }
-    else if (v.compare("hops")==0) {
-        cout<<" imp hop hops "<<endl;
-        dijkstra(v, hops);
-    }
-    else if (v.compare("trolls")==0){
-        dijkstra(v, trolls);
-    }
-    /*
-    else if (v.compare("gold")){
-        dijkstra(v, gold);
-    }*/
-    //default hops
-    else
-        dijkstra(v, hops);
 }
 
 
@@ -335,13 +337,15 @@ int main()
     }
     
     else cout << "Unable to open file";
-    int * weights;
-
+   
+  
     // show or display
     
     //test with distance
     //weights =
-    assign_variable("potato", c_h, c_d, c_t, c_r);
+    int * weights;
+    cout<<" "<<endl;
+    dijkstra("potato", c_h, c_d, c_t, c_r);
     /*
     assign_variable("time", c_h, c_d, c_t, c_r);
     assign_variable("hops", c_h, c_d, c_t, c_r);
