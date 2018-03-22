@@ -42,22 +42,24 @@ public:
     }
 };
 
-int * dijkstra(int size, int **graph)
+int * dijkstra(string v, int **graph)
 {
     int * results;
     int mini;
-    bool *visited = new bool [size];
-    int *vr = new int [size];
-    int *h = new int [size];
-    int *r = new int [size];
-    int *d = new int [size];
-    int *g = new int [size];
-    int *t = new int [size];
+    bool *visited = new bool [LEVELS];
+   
+    int *vr = new int [LEVELS];
+    
+    int *h = new int [LEVELS];
+    int *r = new int [LEVELS];
+    int *d = new int [LEVELS];
+    int *g = new int [LEVELS];
+    int *t = new int [LEVELS];
     
     
     
     // Start with variable value of each node as infinity and visited status as false
-    for (int i = 0; i < size; i++)
+    for (int i = 0; i < LEVELS; i++)
     {
         vr[i] = INFINITY;
         t[i]=0;
@@ -92,7 +94,7 @@ int * dijkstra(int size, int **graph)
         nodeVariable temp = pq.top();
         pq.pop();
         int node= temp.node;
-        for(int i=0;i < size;i ++ )
+        for(int i=0;i < LEVELS;i ++ )
         {
             if(graph[node][i]!=0)
             {
@@ -127,8 +129,22 @@ int * dijkstra(int size, int **graph)
         
     }
     
-    cout << "The minimum value from " << char (source_city+65) << " to all the nodes is" << endl;
-    for(int i=0;i < size;i++)
+    if (v.compare("distance")) {
+        d = vr;
+    }
+    else if (v.compare("time")){
+        t = vr;
+    }
+    else if (v.compare("hops")) {
+        h = vr;
+    }
+    else if (v.compare("trolls")){
+        r = vr;
+    }
+    
+    cout << "The minimum "<< v <<" from " << char (source_city+65) << " to all the nodes is" << endl;
+  
+    for(int i=0;i < LEVELS;i++)
     {
         int letter = i + 65;
         if (vr[i] != INFINITY && i != source_city)//remove node unvisited + src
@@ -139,8 +155,7 @@ int * dijkstra(int size, int **graph)
             cout <<"From "<<(char)letter<< " number of hops: "<< h[i]<<" distance:" << d[i] <<" time:" <<t[i]<<" gold:"<<g[i]<<" trolls:"<<r[i] <<"\n";
         }
     }
-    
-    cout<< endl;
+    cout<< endl<<endl;//do not remove or bus fault.
     return results;
    
 }
@@ -249,6 +264,7 @@ int main()
     ifstream file ("map.txt");
     int line_count = 0;
     int** c_d = create2DArray();
+  //  int** c_g = create2DArray();
     int** c_t = create2DArray();
     int** c_h = create2DArray();
     int** c_tr = create2DArray();
@@ -263,16 +279,22 @@ int main()
             strcpy (cstr, line.c_str());
             
             char * p = strtok (cstr," ");
-            int src, dest, distance;
-            int h=1;
+            int src, dest, distance, time, gold, hops, trolls;
             
             src =cstr[0]-'A';
             dest = cstr[2]-'A';
+            
             distance = set_large(numerical_data(cstr,4));
+            time =set_large(numerical_data(cstr, 8));
+            //gold = set_medium(numerical_data(cstr, 12));
+            trolls =  set_small(atoi(&cstr[line.length()-1]));
+            int h=1;//hops are always 1 from city to city;
+           
+            
             populate(c_d, src, dest, distance);
-            populate(c_t, src , dest, set_large(numerical_data(cstr, 8)) );
-            //populate(c_g, src , dest, set_medium(numerical_data(cstr, 12)));
-            populate(c_tr, src , dest, set_small(atoi(&cstr[line.length()-1])));
+            populate(c_t, src , dest, time );
+            //populate(c_g, src , dest, );
+            populate(c_tr, src , dest, trolls);
             populate(c_h, src , dest, h);
             
             delete[] cstr;
@@ -292,15 +314,16 @@ int main()
         // display(c_d);
         //show(c_d);
 
-        cout<< "min distance: "<< endl;
-        weights = dijkstra(LEVELS, c_d);
-        cout<< "min time: "<< endl;
-        weights= dijkstra(LEVELS, c_t);
-        cout<< "min trolls: "<< endl;
-        weights= dijkstra(LEVELS, c_tr);
-        cout<< "min hops: "<< endl;
-        weights= dijkstra(LEVELS, c_h);
-        
+       // cout<< "min distance: "<< endl;
+        weights = dijkstra("distance", c_d);
+        //cout<< "min time: "<< endl;
+        weights= dijkstra("time", c_t);
+       // cout<< "min trolls: "<< endl;
+        weights= dijkstra("trolls", c_tr);
+       // cout<< "min hops: "<< endl;
+        weights= dijkstra("hops", c_h);
+    
+    
         
         delete * c_d;
         delete  c_d;
