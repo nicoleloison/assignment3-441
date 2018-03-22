@@ -27,7 +27,7 @@ struct nodeVariable
 {
     int node;
     int variable;
-    int time, distance, gold, trolls, hops;
+    int time, distance, trolls, hops, gold;
 };
 
 class CompareVariable
@@ -62,11 +62,12 @@ int * dijkstra(string v, int **graph)
     for (int i = 0; i < LEVELS; i++)
     {
         vr[i] = INFINITY;
-        t[i]=0;
-        d[i]=0;
-        r[i]=0;
-        g[i]=0;
         h[i]=0;
+        d[i]=0;
+        t[i]=0;
+        g[i]=0;
+        r[i]=0;
+       
         visited[i] = false;
     }
     
@@ -98,13 +99,14 @@ int * dijkstra(string v, int **graph)
         {
             if(graph[node][i]!=0)
             {
-                // Update the distance if it is smaller than the current distance
+                // Update the variable if it is smaller than the current distance
                 if(vr[i] > (vr[node]+graph[node][i])){
                     vr[i] = vr[node]+graph[node][i];
-                    t[i] = t[node]+graph[node][i];
+                    
                     h[i] = h[node]+graph[node][i];
-                    g[i] = g[node]+graph[node][i];
                     d[i] = d[node]+graph[node][i];
+                    t[i] = t[node]+graph[node][i];
+                    g[i] = g[node]+graph[node][i];
                     r[i] = r[node]+graph[node][i];
                     
                 }
@@ -116,11 +118,12 @@ int * dijkstra(string v, int **graph)
                     nodeVariable newNode;
                     newNode.node=i;
                     newNode.variable=vr[i];
-                    newNode.time=t[i];
+                    newNode.hops = h[i];
                     newNode.distance = d[i];
+                    newNode.time=t[i];
                     newNode.trolls = r[i];
                     newNode.gold = g[i];
-                    newNode.hops = h[i];
+                 
                     pq.push(newNode);
                     visited[i]=true;
                 }
@@ -150,9 +153,7 @@ int * dijkstra(string v, int **graph)
         if (vr[i] != INFINITY && i != source_city)//remove node unvisited + src
         {
             results[i]= vr[i];
-            //cout << c <<endl;
-          //  cout <<  (char)letter<< " : " << results[i] <<" aside time: "<< t[i]<< "\n";
-            cout <<"From "<<(char)letter<< " number of hops: "<< h[i]<<" distance:" << d[i] <<" time:" <<t[i]<<" gold:"<<g[i]<<" trolls:"<<r[i] <<"\n";
+            cout <<"From "<<(char)letter<< " number of hops: "<< h[i]<<"\tdistance:" << d[i] <<"\ttime:" <<t[i]<<"\tgold:"<<g[i]<<"\ttrolls:"<<r[i] <<"\n";
         }
     }
     cout<< endl<<endl;//do not remove or bus fault.
@@ -161,17 +162,18 @@ int * dijkstra(string v, int **graph)
 }
 
 void assign_variable(string v, int ** hops, int **distance, int **time, int **trolls /*, int **gold*/){
-    
-    if (v.compare("distance")) {
+    cout<<" "<<endl;
+    if (v.compare("distance")==0) {
         dijkstra(v, distance);
     }
-    else if (v.compare("time")){
+    else if (v.compare("time")==0){
         dijkstra(v, time);
     }
-    else if (v.compare("hops")) {
-         dijkstra(v, hops);
+    else if (v.compare("hops")==0) {
+        cout<<" imp hop hops "<<endl;
+        dijkstra(v, hops);
     }
-    else if (v.compare("trolls")){
+    else if (v.compare("trolls")==0){
         dijkstra(v, trolls);
     }
     /*
@@ -277,6 +279,11 @@ void show_stats( int * calculated){
     
 }
 
+void clean(int ** c_d){
+    delete * c_d;
+    delete  c_d;
+    c_d = NULL;
+}
 
 /* RETURNS  string * graph(string filename, string variable)*/
 
@@ -311,6 +318,7 @@ int main()
             time =set_large(numerical_data(cstr, 8));
             //gold = set_medium(numerical_data(cstr, 12));
             trolls =  set_small(atoi(&cstr[line.length()-1]));
+           
             int h=1;//hops are always 1 from city to city;
            
             
@@ -327,15 +335,18 @@ int main()
     }
     
     else cout << "Unable to open file";
-        
-        int * weights;
+    int * weights;
 
+    // show or display
     
     //test with distance
-    assign_variable(variable_distance, c_h, c_d, c_t, c_r);
+    //weights =
+    assign_variable("potato", c_h, c_d, c_t, c_r);
+    /*
     assign_variable("time", c_h, c_d, c_t, c_r);
     assign_variable("hops", c_h, c_d, c_t, c_r);
     assign_variable("trolls", c_h, c_d, c_t, c_r);
+  */
     
     //dijkstra("distance", c_d);
     //cout<< "min time: "<< endl;
@@ -345,13 +356,12 @@ int main()
         weights= dijkstra("trolls", c_r);
        // cout<< "min hops: "<< endl;
         weights= dijkstra("hops", c_h);*/
+
+    clean(c_h);
+    clean(c_d);
+    clean(c_t);
+    clean(c_r);
+    return 0;
     
-    
-        /*
-        delete * c_d;
-        delete  c_d;
-        c_d = NULL;*/
-        
-        return 0;
-        }
+}
 
