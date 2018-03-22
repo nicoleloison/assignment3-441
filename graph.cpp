@@ -160,6 +160,29 @@ int * dijkstra(string v, int **graph)
    
 }
 
+void assign_variable(string v, int ** hops, int **distance, int **time, int **trolls /*, int **gold*/){
+    
+    if (v.compare("distance")) {
+        dijkstra(v, distance);
+    }
+    else if (v.compare("time")){
+        dijkstra(v, time);
+    }
+    else if (v.compare("hops")) {
+         dijkstra(v, hops);
+    }
+    else if (v.compare("trolls")){
+        dijkstra(v, trolls);
+    }
+    /*
+    else if (v.compare("gold")){
+        dijkstra(v, gold);
+    }*/
+    //default hops
+    else
+        dijkstra(v, hops);
+}
+
 
 /*distance*/
 int set_large(int len) {
@@ -267,7 +290,7 @@ int main()
   //  int** c_g = create2DArray();
     int** c_t = create2DArray();
     int** c_h = create2DArray();
-    int** c_tr = create2DArray();
+    int** c_r = create2DArray();
     
   //  ifstream file (myfile);
     if (file.is_open()){
@@ -294,7 +317,7 @@ int main()
             populate(c_d, src, dest, distance);
             populate(c_t, src , dest, time );
             //populate(c_g, src , dest, );
-            populate(c_tr, src , dest, trolls);
+            populate(c_r, src , dest, trolls);
             populate(c_h, src , dest, h);
             
             delete[] cstr;
@@ -315,19 +338,22 @@ int main()
         //show(c_d);
 
        // cout<< "min distance: "<< endl;
-        weights = dijkstra("distance", c_d);
+   // weights =
+    assign_variable("variable_distance", c_h, c_d, c_t, c_r);
+    //dijkstra("distance", c_d);
         //cout<< "min time: "<< endl;
+    /*
         weights= dijkstra("time", c_t);
        // cout<< "min trolls: "<< endl;
-        weights= dijkstra("trolls", c_tr);
+        weights= dijkstra("trolls", c_r);
        // cout<< "min hops: "<< endl;
-        weights= dijkstra("hops", c_h);
+        weights= dijkstra("hops", c_h);*/
     
     
-        
+        /*
         delete * c_d;
         delete  c_d;
-        c_d = NULL;
+        c_d = NULL;*/
         
         return 0;
         }
