@@ -174,8 +174,9 @@ int * dijkstra(string v, int ** hops, int **distance, int **time, int **gold,  i
         r = vr;
     }
     
-    cout << "The minimum "<< v <<" from " << char (source_city+65) << " for the dwarves are:"<<endl;
-    cout <<endl;
+    cout << "\nThe minimum "<< v <<" from " << char (source_city+65) << " for the dwarves are:"<<endl;
+    cout<< flush;
+  //  cout <<endl;
     
     for(int i=0;i < LEVELS;i++)
     {
@@ -191,15 +192,13 @@ int * dijkstra(string v, int ** hops, int **distance, int **time, int **gold,  i
             display.assign(d);
             display.append(" can go from ");
             
-            cout << display << ccc << " to destination with :"<<endl;
-            cout<<endl;
-            cout << h[i] <<" hops"<<endl;
-            cout<<"traveling "<<d[i]<<" km " << d[i] <<endl;
-            cout<<"for " <<t[i]<<" hours"<<endl;
-            cout <<"collecting "<<g[i]<<" pieces of gold"<<endl;
-            cout <<"encountering "<<r[i]<<" trolls." << endl;
+            cout << display << ccc << " to destination:\n"<<flush
+            <<"going through\t"<<h[i]<<" hops "
+            <<"travelling\t"<<d[i]<<" km "
+            <<"for\t" <<t[i]<<" hours"
+            <<"collecting\t"<<g[i]<<" pieces of gold"
+            <<"encountering\t"<<r[i]<<" trolls." << endl;
             cout << endl;
-            cout <<endl;
         }
     }
     
@@ -344,6 +343,7 @@ int * graph(string filename, string variable, string* addresses)
             
             int hop=1;//hops are always 1 from city to city;
             distance = set_large(numerical_data(cstr,4));
+          //  cout<<"distance: "<<distance<<endl;
             time =set_large(numerical_data(cstr, 8));
             gold = set_medium(numerical_data(cstr, 12));
             trolls =  set_small(atoi(&cstr[line.length()-1]));
