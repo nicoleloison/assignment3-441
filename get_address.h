@@ -43,7 +43,7 @@ string * get_address( string filename ){
         myfile.close();
     }
     
-    else cout << "Unable to open file contacts.txt";
+    else cout << "Unable to open file addresses file";
     
 
     

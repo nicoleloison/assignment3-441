@@ -11,7 +11,6 @@
 #include <vector>
 #include <stdio.h>
 #include "graph.h"
-#include "get_people.h"
 
 using namespace std;
 

@@ -16,7 +16,6 @@
 #include <stdbool.h>
 #include <stdlib.h>
 #include <string.h>
-
 #include "get_address.h"
 
 #define INFINITY 65535
