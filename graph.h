@@ -176,7 +176,6 @@ int * dijkstra(string v, int ** hops, int **distance, int **time, int **gold,  i
     
     cout << "\nThe minimum "<< v <<" from " << char (source_city+65) << " for the dwarves are:"<<endl;
     cout<< flush;
-  //  cout <<endl;
     
     for(int i=0;i < LEVELS;i++)
     {
@@ -188,16 +187,15 @@ int * dijkstra(string v, int ** hops, int **distance, int **time, int **gold,  i
         {
             results[i]= vr[i];
            
-            string display;
-            display.assign(d);
-            display.append(" can go from ");
-            
-            cout << display << ccc << " to destination:\n"<<flush
+            string dw;
+            dw.assign(d);
+    
+            cout << d << " can go from "<< ccc << " to destination:\n"
             <<"going through\t"<<h[i]<<" hops "
             <<"travelling\t"<<d[i]<<" km "
-            <<"for\t" <<t[i]<<" hours"
+            <<"for\t" <<t[i]<<" hours "
             <<"collecting\t"<<g[i]<<" pieces of gold"
-            <<"encountering\t"<<r[i]<<" trolls." << endl;
+            <<"encountering\t"<<r[i]<<" trolls." << flush <<endl;
             cout << endl;
         }
     }
