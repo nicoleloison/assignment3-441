@@ -364,7 +364,6 @@ int * graph(string filename, string variable, string* addresses)
     else cout << "Unable to open file";
         
         int * weights;
-        cout<<" "<<endl;
         weights = dijkstra(variable, c_h, c_d, c_t, c_g, c_r, addresses);
         
         clean(c_h);
