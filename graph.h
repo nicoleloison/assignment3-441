@@ -364,7 +364,6 @@ int * graph(string filename, string variable, string* addresses)
             
             int hop=1;//hops are always 1 from city to city;
             distance = set_large(numerical_data(cstr,4));
-          //  cout<<"distance: "<<distance<<endl;
             time =set_large(numerical_data(cstr, 8));
             gold = set_medium(numerical_data(cstr, 12));
             trolls =  set_small(atoi(&cstr[line.length()-1]));

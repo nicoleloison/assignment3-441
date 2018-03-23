@@ -2,7 +2,7 @@
  ID 10083186
  CPSC 441 - A3
  
- get address HEADER
+ GET ADDDRESS HEADER
  */
 
 #include <iostream>
