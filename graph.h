@@ -51,7 +51,6 @@ int ** assign_variable(string v, int ** hops, int **distance, int **time,  int *
         return time;
     }
     else if (v.compare("hops")==0) {
-        cout<<" imp hop hops "<<endl;
         return hops;
     }
     else if (v.compare("trolls")==0){
@@ -67,8 +66,9 @@ int ** assign_variable(string v, int ** hops, int **distance, int **time,  int *
 }
 
 
-int * dijkstra(string v, int ** hops, int **distance, int **time, int **gold,  int **trolls)
+int * dijkstra(string v, int ** hops, int **distance, int **time, int **gold,  int **trolls, string* names_city)
 {
+    
     int ** graph = assign_variable(v, hops, distance, time, gold ,trolls);
     int * results;
     int mini;
@@ -172,6 +172,15 @@ int * dijkstra(string v, int ** hops, int **distance, int **time, int **gold,  i
         r = vr;
     }
     
+    int le = names_city->length();
+    string * cities= new string [le+1];
+    
+    for (int j = 0; j < le; j ++){
+    
+        int len = names_city[j].length();
+        cities[j] = names_city[j][len-1];
+    }
+    
     cout << "The minimum "<< v <<" from " << char (source_city+65) << " to all the nodes is" << endl;
     
     for(int i=0;i < LEVELS;i++)
@@ -180,10 +189,13 @@ int * dijkstra(string v, int ** hops, int **distance, int **time, int **gold,  i
         if (vr[i] != INFINITY && i != source_city)//remove node unvisited + src
         {
             results[i]= vr[i];
-            cout <<"From "<<(char)letter<< " number of hops: "<< h[i]<<"\tdistance:" << d[i] <<"\ttime:" <<t[i]<<"\tgold:"<<g[i]<<"\ttrolls:"<<r[i] <<"\n";
+            if(to_string((char)letter).compare(cities[i])==0){
+                cout<<"po"<<endl;
+            }
+            cout<<endl;
+            cout <<"From "<<(char)letter<< " number of hops: "<< h[i]<<"\tdistance:" << d[i] <<"\ttime:" <<t[i]<<"\tgold:"<<g[i]<<"\ttrolls:"<<r[i] << endl;
         }
     }
-    cout<< endl<<endl;//do not remove or bus fault.
     return results;
     
 }
@@ -282,15 +294,15 @@ void show_stats( int * calculated){
     
 }
 
-void clean(int ** c_d){
-    delete * c_d;
-    delete  c_d;
-    c_d = NULL;
+void clean(int ** c){
+    delete * c;
+    delete  c;
+    c = NULL;
 }
 
 /* RETURNS  int * graph(string filename, string variable)*/
 
-int * graph(string filename, string variable)
+int * graph(string filename, string variable, string* names_city)
 {
     //string variable_distance = "distance";
     string line;
@@ -340,13 +352,14 @@ int * graph(string filename, string variable)
         
         int * weights;
         cout<<" "<<endl;
-        weights = dijkstra(variable, c_h, c_d, c_t, c_g, c_r);
+        weights = dijkstra(variable, c_h, c_d, c_t, c_g, c_r, names_city);
         
         clean(c_h);
         clean(c_d);
         clean(c_t);
         clean(c_g);
         clean(c_r);
+    
         return weights ;
         
 }
