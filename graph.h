@@ -183,19 +183,22 @@ int * dijkstra(string v, int ** hops, int **distance, int **time, int **gold,  i
         char ccc =  (char) letter;
         string d = get_dwarf_from_city(addresses,ccc);
         
+        //cout << d[i]<<flush<<endl;
         if (vr[i] != INFINITY && i != source_city)//remove node unvisited + src
         {
             results[i]= vr[i];
-           
+            
+           //PROBLEM ARISING HERE
+            
             string dw;
             dw.assign(d);
-    
             cout << d << " can go from "<< ccc << " to destination:\n"
-            <<"going through\t"<<h[i]<<" hops "
-            <<"travelling\t"<<d[i]<<" km "
-            <<"for\t" <<t[i]<<" hours "
-            <<"collecting\t"<<g[i]<<" pieces of gold"
-            <<"encountering\t"<<r[i]<<" trolls." << flush <<endl;
+            <<"going through\t"<<h[i]<<" hops, "
+            <<"travelling\t"<<d[i]<<" km, "
+            <<"for " <<t[i]<<" hours, "
+            <<"collecting\t"<<g[i]<<" pieces of gold, "
+            <<"encountering\t"<<r[i]<<" trolls.";
+            cout.flush();
             cout << endl;
         }
     }
