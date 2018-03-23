@@ -18,21 +18,25 @@ using namespace std;
 /*main*/
 int main (int argc, char* argv[]) {
     
-    if (argc!=3)
+    if (argc!=4)
     {
-        cout <<" Please enter 2 arguments: map/fullmap hops/hops/time/trolls/gold"<<endl;
+        cout <<" Please enter 3 arguments: map/fullmap hops/distance/time/trolls/gold addresses/fulladdresses"<<endl;
         return -1;
     }
     
-    string * n = get_people("contacts.txt");
-    string * a = get_address("addresses.txt");
-    string * c = get_city(a);
-    
-    string filename, function;
+    string filename, function, people;
     filename.assign(argv[1]);
     filename.append(".txt");
     function.assign(argv[2]);
-    cout << filename<<" "<<function<<endl;
+    people.assign(argv[3]);
+    people.append(".txt");
+    
+    cout << filename<<" "<<function<<" "<<people<<endl;
+
+
+    
+    string * a = get_address(people);
+    string * c = get_city(a);
     int * algorithm = graph(filename, function, a);
 
     return 0;
