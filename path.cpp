@@ -16,7 +16,7 @@
 #include "readlocations.h"
 #include "graph.h"
 #include "get_people.h"
-#include "get_address.h"
+
 
 using namespace std;
 
@@ -24,12 +24,17 @@ using namespace std;
 int main () {
     
     ListLocation locations= read_locations();
+ 
     ListHomes contacts =  read_contacts();
     string * n = get_people("contacts.txt");
+   
     string * a = get_address("locations.txt");
+    
     string * c = get_city(a);
     
-    int * algorithm = graph("map.txt", "distance", a);
+    string d = get_dwarf_from_city(a,'C');
+    //cout << * d <<endl;
+    int * algorithm = graph("map.txt", "time", a);
     
     /*
     for(int i = 0; i< le ; i++){

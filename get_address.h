@@ -48,7 +48,7 @@ string * get_address( string filename ){
 
     
     for (int i = 0; i < line_count; i ++){
-        cout << addresses[i]<< endl;
+        //cout << addresses[i]<< endl;
     }
     return addresses;
 
@@ -66,5 +66,21 @@ string * get_city (string * addresses){
     
     return cities;
 }
+
+string get_dwarf_from_city(string * addresses, char city){
+    
+    string dwarf;
+    
+    for (int i = 0; i < LINES; i ++){
+        int le = addresses[i].length();
+        if( addresses[i][le-1]== city){
+            dwarf.assign(addresses[i].substr(0,le-2));
+        }
+    }
+   // cout <<"For "<< dwarf << " from "<< city <<flush;
+    
+    return dwarf;
+}
+
 
 

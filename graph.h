@@ -17,6 +17,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "get_address.h"
+
 #define INFINITY 65535
 
 using namespace std;
@@ -66,7 +68,7 @@ int ** assign_variable(string v, int ** hops, int **distance, int **time,  int *
 }
 
 
-int * dijkstra(string v, int ** hops, int **distance, int **time, int **gold,  int **trolls, string* names_city)
+int * dijkstra(string v, int ** hops, int **distance, int **time, int **gold,  int **trolls, string* addresses)
 {
     
     int ** graph = assign_variable(v, hops, distance, time, gold ,trolls);
@@ -172,30 +174,45 @@ int * dijkstra(string v, int ** hops, int **distance, int **time, int **gold,  i
         r = vr;
     }
     
-    int le = names_city->length();
-    string * cities= new string [le+1];
-    
-    for (int j = 0; j < le; j ++){
-    
-        int len = names_city[j].length();
-        cities[j] = names_city[j][len-1];
-    }
-    
-    cout << "The minimum "<< v <<" from " << char (source_city+65) << " to all the nodes is" << endl;
+    cout << "The minimum "<< v <<" from " << char (source_city+65) << " for the dwarves are:"<<endl;
     
     for(int i=0;i < LEVELS;i++)
     {
+      //  cout <<endl;
         int letter = i + 65;
+        char ccc =  (char) letter;
+        string d = get_dwarf_from_city(addresses,ccc);
+        
         if (vr[i] != INFINITY && i != source_city)//remove node unvisited + src
         {
             results[i]= vr[i];
-            if(to_string((char)letter).compare(cities[i])==0){
-                cout<<"po"<<endl;
-            }
+           
+            string display;
+            display.assign(d);
+            display.append(" can go from ");
+            
+            cout << display << ccc << " with :"<<endl;
+             cout<<endl;
+            cout <<"hops: "<< h[i]<<endl;
             cout<<endl;
-            cout <<"From "<<(char)letter<< " number of hops: "<< h[i]<<"\tdistance:" << d[i] <<"\ttime:" <<t[i]<<"\tgold:"<<g[i]<<"\ttrolls:"<<r[i] << endl;
+            cout<<"distance: " << d[i] <<endl;
+               cout<<endl;
+            cout<<"time: " <<t[i]<<endl;
+               cout<<endl;
+            cout <<"gold: "<<g[i]<<endl;
+               cout<<endl;
+            cout <<"trolls: "<<r[i] << endl;
+            cout << endl;
+            cout <<endl;
         }
     }
+    
+    delete [] t;
+    delete [] d;
+    delete [] h;
+    delete [] g;
+    delete [] r;
+
     return results;
     
 }
@@ -302,7 +319,7 @@ void clean(int ** c){
 
 /* RETURNS  int * graph(string filename, string variable)*/
 
-int * graph(string filename, string variable, string* names_city)
+int * graph(string filename, string variable, string* addresses)
 {
     //string variable_distance = "distance";
     string line;
@@ -352,7 +369,7 @@ int * graph(string filename, string variable, string* names_city)
         
         int * weights;
         cout<<" "<<endl;
-        weights = dijkstra(variable, c_h, c_d, c_t, c_g, c_r, names_city);
+        weights = dijkstra(variable, c_h, c_d, c_t, c_g, c_r, addresses);
         
         clean(c_h);
         clean(c_d);
