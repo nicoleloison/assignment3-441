@@ -84,6 +84,7 @@ int * dijkstra(string v, int ** hops, int **distance, int **time, int **gold,  i
     int *g = new int [LEVELS];
     int *t = new int [LEVELS];
     
+    double avg_h=0, avg_d =0, avg_t = 0, avg_r =0, avg_g =0;
     
     
     // Start with variable value of each node as infinity and visited status as false
@@ -174,16 +175,18 @@ int * dijkstra(string v, int ** hops, int **distance, int **time, int **gold,  i
         r = vr;
     }
     
-    cout << "\nThe minimum "<< v <<" from " << char (source_city+65) << " for the dwarves are:"<<endl;
-    cout<< flush;
+    cout << "\nThe minimum "<< v <<" from " << char (source_city+65) << " for the dwarves are:"<<flush;
+    cout<< endl;
+    cout <<endl<<endl;
     
+    int divider = 1;
     for(int i=0;i < LEVELS;i++)
     {
+     
         int letter = i + 65;
         char ccc =  (char) letter;
         string d = get_dwarf_from_city(addresses,ccc);
         
-        //cout << d[i]<<flush<<endl;
         if (vr[i] != INFINITY && i != source_city)//remove node unvisited + src
         {
             results[i]= vr[i];
@@ -200,7 +203,24 @@ int * dijkstra(string v, int ** hops, int **distance, int **time, int **gold,  i
             <<"encountering\t"<<r[i]<<" trolls.";
             cout.flush();
             cout << endl;
+            
+            avg_h += h[i];
+            avg_d += d[i];
+            avg_t += t[i];
+            avg_g += g[i];
+            avg_r += r[i];
+            divider ++;
         }
+    }
+    
+    if(avg_h!=0){
+        avg_h= avg_h/(divider);
+        avg_d= avg_d/(divider);
+        avg_t= avg_t/(divider);
+        avg_g= avg_g/(divider);
+        avg_r= avg_r/(divider);
+    
+        cout <<"\nAverage hops: "<<avg_h<<", distance: "<< avg_d <<", time: " << avg_t <<", gold: "<< avg_g <<", trolls:"<<avg_r<<endl;
     }
     
     delete [] t;
